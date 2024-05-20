@@ -8,9 +8,8 @@ import lombok.Setter;
 @Getter
 @Setter
 @NoArgsConstructor
-@Inheritance(strategy = InheritanceType.JOINED)
-@Entity
-public class AbstractCustomerAsPerson extends AbstractCustomer {
+@MappedSuperclass
+public abstract class AbstractCustomerAsPerson extends AbstractCustomer {
 
     @OneToOne
     @JoinColumn(name = "Idp")

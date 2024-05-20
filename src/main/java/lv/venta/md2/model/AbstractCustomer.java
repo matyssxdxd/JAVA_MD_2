@@ -14,7 +14,7 @@ import java.util.ArrayList;
 @Getter
 @Setter
 @NoArgsConstructor
-@Inheritance(strategy = InheritanceType.JOINED)
+@Inheritance(strategy = InheritanceType.TABLE_PER_CLASS)
 @Entity
 public abstract class AbstractCustomer {
 
