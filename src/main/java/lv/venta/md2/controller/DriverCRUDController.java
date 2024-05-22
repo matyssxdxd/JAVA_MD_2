@@ -17,11 +17,13 @@ public class DriverCRUDController {
     @Autowired
     private IDriverCRUDService driverCRUD;
 
+    @CrossOrigin(origins = "http://localhost:4200")
     @GetMapping("/show/all")
     public ResponseEntity<Object> getDrivers() {
         return ResponseEntity.ok(driverCRUD.selectAllDriver());
     }
 
+    @CrossOrigin(origins = "http://localhost:4200")
     @GetMapping("/show/all/{id}")
     public ResponseEntity<Object> getDriverById(@PathVariable int id) {
         try {

@@ -9,8 +9,6 @@ import lv.venta.md2.service.ICustomerService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.util.Optional;
-
 @Service
 public class CustomerServiceImpl implements ICustomerService {
 

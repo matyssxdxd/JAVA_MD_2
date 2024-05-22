@@ -36,6 +36,11 @@ public class Md2Application {
                 CustomerAsPerson c2 = new CustomerAsPerson(a2, "+37120627123", p1);
                 customerRepo.save(c2);
 
+                Driver d1 = new Driver("Rudolfs", "Kalmars", "130301-20821", "AT789221", 8.3f);
+                Driver d2 = new Driver("Daniels", "Kalnas", "210210-21221", "AT832221", 1.2f);
+
+                driverRepo.save(d1);
+                driverRepo.save(d2);
             }
         };
     }

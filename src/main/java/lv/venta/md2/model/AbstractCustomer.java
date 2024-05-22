@@ -9,7 +9,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
-import java.util.ArrayList;
+import java.util.List;
 
 @Getter
 @Setter
@@ -36,7 +36,7 @@ public abstract class AbstractCustomer {
 
 
     @OneToMany(mappedBy = "customer")
-    private ArrayList<Parcel> parcels;
+    private List<Parcel> parcels;
 
     @NotNull
     @Column(name = "Customer_Code")

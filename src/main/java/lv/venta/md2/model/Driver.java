@@ -13,6 +13,7 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import java.util.ArrayList;
+import java.util.List;
 
 @Getter
 @Setter
@@ -33,7 +34,7 @@ public class Driver extends Person {
     private float experienceInYears;
 
     @OneToMany(mappedBy = "driver")
-    private ArrayList<Parcel> parcels;
+    private List<Parcel> parcels;
 
     public Driver(String name, String surname, String personCode, String licenseNo, float experienceInYears) {
         super(name, surname, personCode);
