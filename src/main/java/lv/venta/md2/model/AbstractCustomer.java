@@ -30,9 +30,10 @@ public abstract class AbstractCustomer {
 
     @NotNull
     @Size(min = 12, max = 12)
-    @Pattern(regexp = "[+][371]{3}\\d{8}")
+    @Pattern(regexp = "\\+371\\d{8}")
     @Column(name = "Phone_No")
     private String phoneNo;
+
 
     @OneToMany(mappedBy = "customer")
     private ArrayList<Parcel> parcels;

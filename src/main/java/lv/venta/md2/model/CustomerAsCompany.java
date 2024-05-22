@@ -25,7 +25,7 @@ public class CustomerAsCompany extends AbstractCustomer {
 
     @NotNull
     @Size(min = 13, max = 13)
-    @Pattern(regexp = "\"[A-Z]{2}\\d{11}\"")
+    @Pattern(regexp = "[A-Z]{2}\\d{11}")
     @Column(name = "Company_Reg_No")
     private String companyRegNo;
 

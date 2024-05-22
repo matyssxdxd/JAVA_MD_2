@@ -1,8 +1,6 @@
 package lv.venta.md2;
 
-import lv.venta.md2.model.Address;
-import lv.venta.md2.model.City;
-import lv.venta.md2.model.Person;
+import lv.venta.md2.model.*;
 import lv.venta.md2.repo.*;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
@@ -17,9 +15,8 @@ public class Md2Application {
     }
 
     @Bean
-    public CommandLineRunner testDatabase(IAddressRepo addressRepo, ICustomerAsCompanyRepo customerAsCompanyRepo,
-                                          ICustomerAsPersonRepo customerAsPersonRepo, IDriverRepo driverRepo,
-                                          IParcelRepo parcelRepo, IPersonRepo personRepo) {
+    public CommandLineRunner testDatabase(IAddressRepo addressRepo, IDriverRepo driverRepo,
+                                          IParcelRepo parcelRepo, IPersonRepo personRepo, ICustomerRepo customerRepo) {
         return new CommandLineRunner() {
             @Override
             public void run(String... args) throws Exception {
@@ -32,6 +29,12 @@ public class Md2Application {
                 Address a2 = new Address(City.TALSI, 21, "Maza iela");
                 addressRepo.save(a1);
                 addressRepo.save(a2);
+
+                CustomerAsCompany c1 = new CustomerAsCompany(a1, "+37120627905", "Kalmars un ko", "LV20394839214");
+                customerRepo.save(c1);
+
+                CustomerAsPerson c2 = new CustomerAsPerson(a2, "+37120627123", p1);
+                customerRepo.save(c2);
 
             }
         };
