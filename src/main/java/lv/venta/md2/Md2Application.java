@@ -33,6 +33,10 @@ public class Md2Application {
                 CustomerAsCompany c1 = new CustomerAsCompany(a1, "+37120627905", "Kalmars un ko", "LV20394839214");
                 customerRepo.save(c1);
 
+                CustomerAsCompany c3 = new CustomerAsCompany(a1, "+37122627905", "Kalmars un ksso", "LV23294839214");
+                customerRepo.save(c3);
+
+
                 CustomerAsPerson c2 = new CustomerAsPerson(a2, "+37120627123", p1);
                 customerRepo.save(c2);
 

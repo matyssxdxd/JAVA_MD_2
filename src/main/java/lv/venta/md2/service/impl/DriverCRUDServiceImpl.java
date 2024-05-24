@@ -32,7 +32,7 @@ public class DriverCRUDServiceImpl implements IDriverCRUDService {
         if (id < 0) throw new Exception("driverID must be more than 0");
         if (!driverRepo.existsById(id)) throw new Exception("There is no driver with ID: " + id);
 
-        driverRepo.deleteByIdp(id);
+        driverRepo.deleteById(id);
     }
 
     @Override

@@ -24,7 +24,7 @@ public abstract class AbstractCustomer {
     @GeneratedValue(strategy = GenerationType.AUTO)
     private int idc;
 
-    @OneToOne
+    @ManyToOne
     @JoinColumn(name = "Ida")
     private Address address;
 

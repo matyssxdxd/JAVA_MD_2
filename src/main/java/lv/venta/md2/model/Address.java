@@ -7,6 +7,8 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+import java.util.List;
+
 @Getter
 @Setter
 @NoArgsConstructor
@@ -36,8 +38,8 @@ public class Address {
     @Column(name = "Street_Or_House_Title")
     private String streetOrHouseTitle;
 
-    @OneToOne(mappedBy = "address")
-    private AbstractCustomer abstractCustomer;
+    @OneToMany(mappedBy = "address")
+    private List<AbstractCustomer> abstractCustomer;
 
     public Address(City city, int houseNo, String streetOrHouseTitle) {
         setCity(city);

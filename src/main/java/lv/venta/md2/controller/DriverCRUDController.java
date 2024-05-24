@@ -5,25 +5,23 @@ import lv.venta.md2.model.Driver;
 import lv.venta.md2.service.IDriverCRUDService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
-import org.springframework.stereotype.Controller;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.bind.annotation.PathVariable;
 
-@Controller
+@CrossOrigin(origins = "http://localhost:4200")
+@RestController
 @RequestMapping("/driver")
 public class DriverCRUDController {
 
     @Autowired
     private IDriverCRUDService driverCRUD;
 
-    @CrossOrigin(origins = "http://localhost:4200")
     @GetMapping("/show/all")
     public ResponseEntity<Object> getDrivers() {
         return ResponseEntity.ok(driverCRUD.selectAllDriver());
     }
 
-    @CrossOrigin(origins = "http://localhost:4200")
     @GetMapping("/show/all/{id}")
     public ResponseEntity<Object> getDriverById(@PathVariable int id) {
         try {
@@ -33,13 +31,13 @@ public class DriverCRUDController {
         }
     }
 
-    @GetMapping("/remove/{id}")
+    @DeleteMapping("/remove/{id}")
     public ResponseEntity<Object> removeDriver(@PathVariable int id) {
         try {
             driverCRUD.deleteDriverById(id);
-            return ResponseEntity.ok("Driver removed successfully");
+            return ResponseEntity.ok("{\"message\": \"Driver removed successfully\"}");
         } catch (Exception e) {
-            return ResponseEntity.status(404).body(e.getMessage());
+            return ResponseEntity.status(404).body("{\"error\": \"" + e.getMessage() + "\"}");
         }
     }
 
