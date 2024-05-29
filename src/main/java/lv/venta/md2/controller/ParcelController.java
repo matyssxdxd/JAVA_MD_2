@@ -22,15 +22,15 @@ public class ParcelController {
 
     @GetMapping("/show/all")
     public ResponseEntity<ArrayList<Parcel>> getAllParcels() {
-        return ResponseEntity.ok(parcelService.selectAllParcels());
+        return new ResponseEntity<>(parcelService.selectAllParcels(), HttpStatus.OK);
     }
 
     @GetMapping("/show/{id}")
     public ResponseEntity<Object> getParcelById(@PathVariable int id) {
         try {
-            return ResponseEntity.ok(parcelService.selectParcelById(id));
+            return new ResponseEntity<>(parcelService.selectParcelById(id), HttpStatus.OK);
         } catch (Exception e) {
-            return ResponseEntity.status(404).body(e.getMessage());
+            return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
         }
     }
 
@@ -46,39 +46,39 @@ public class ParcelController {
     @GetMapping("/show/driver/{id}")
     public ResponseEntity<Object> getParcelsByDriverId(@PathVariable int id) {
         try {
-            return ResponseEntity.ok(parcelService.selectAllParcelsDeliveredByDriverId(id));
+            return new ResponseEntity<>(parcelService.selectAllParcelsDeliveredByDriverId(id), HttpStatus.OK);
         } catch (Exception e) {
-            return ResponseEntity.status(404).body(e.getMessage());
+            return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
         }
     }
 
     @GetMapping("/show/price/{threshold}")
     public ResponseEntity<Object> getParcelsByPrice(@PathVariable int threshold) {
         try {
-            return ResponseEntity.ok(parcelService.selectAllParcelsPriceLessThan(threshold));
+            return new ResponseEntity<>(parcelService.selectAllParcelsPriceLessThan(threshold), HttpStatus.OK);
         } catch (Exception e) {
-            return ResponseEntity.status(404).body(e.getMessage());
+            return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
         }
     }
 
     @GetMapping("/show/city/{cityParam}")
     public ResponseEntity<Object> getParcelsByCity(@PathVariable @Valid City cityParam) {
         try {
-            return ResponseEntity.ok(parcelService.selectAllParcelsDeliveredToCity(cityParam));
+            return new ResponseEntity<>(parcelService.selectAllParcelsDeliveredToCity(cityParam), HttpStatus.OK);
         } catch (Exception e) {
-            return ResponseEntity.status(404).body(e.getMessage());
+            return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
         }
     }
 
     @PostMapping("/add/{customerCode}/{driverId}")
     public ResponseEntity<Object> addParcel(@RequestBody @Valid Parcel parcel, @PathVariable String customerCode, @PathVariable int driverId, BindingResult result) {
-        if (result.hasErrors()) return ResponseEntity.status(400).body(result.getAllErrors());
+        if (result.hasErrors()) return new ResponseEntity<>(result.getAllErrors(), HttpStatus.BAD_REQUEST);
 
         try {
             parcelService.insertNewParcelByCustomerCodeAndDriverId(parcel, customerCode, driverId);
-            return ResponseEntity.ok("Parcel added successfully");
+            return new ResponseEntity<>("Parcel added successfully", HttpStatus.OK);
         } catch (Exception e) {
-            return ResponseEntity.status(404).body(e.getMessage());
+            return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
         }
     }
 
@@ -87,27 +87,27 @@ public class ParcelController {
     public ResponseEntity<Object> updateParcelDriverByParcelIdAndDriverId(@PathVariable int parcelId, @PathVariable int driverId) {
         try {
             parcelService.changeParcelDriverByParcelIdAndDriverId(parcelId, driverId);
-            return ResponseEntity.ok("Parcel updated successfully");
+            return new ResponseEntity<>("Parcel updated successfully", HttpStatus.OK);
         } catch (Exception e) {
-            return ResponseEntity.status(500).body(e.getMessage());
+            return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
         }
     }
 
     @GetMapping("/calculate/income/{customerId}")
     public ResponseEntity<Object> getIncomeByCustomerId(@PathVariable int customerId) {
         try {
-            return ResponseEntity.ok(parcelService.calculateIncomeOfParcelsByCustomerId(customerId));
+            return new ResponseEntity<>(parcelService.calculateIncomeOfParcelsByCustomerId(customerId), HttpStatus.OK);
         } catch (Exception e) {
-            return ResponseEntity.status(500).body(e.getMessage());
+            return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
         }
     }
 
     @GetMapping("/calculate/count/today")
     public ResponseEntity<Object> getParcelsToDeliverToday() {
         try {
-            return ResponseEntity.ok(parcelService.calculateHowManyParcelsNeedToDeliverToday());
+            return new ResponseEntity<>(parcelService.calculateHowManyParcelsNeedToDeliverToday(), HttpStatus.OK);
         } catch (Exception e) {
-            return ResponseEntity.status(500).body(e.getMessage());
+            return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
         }
     }
 

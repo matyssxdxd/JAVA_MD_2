@@ -6,11 +6,10 @@ import lv.venta.md2.model.CustomerAsCompany;
 import lv.venta.md2.model.CustomerAsPerson;
 import lv.venta.md2.service.ICustomerService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
-
-import java.util.Map;
 
 @CrossOrigin(origins = "http://localhost:4200")
 @RestController
@@ -22,30 +21,30 @@ public class CustomerController {
 
     @GetMapping("/show/all")
     public ResponseEntity<Object> getCustomers() {
-        return ResponseEntity.ok(customerService.getAllCustomers());
+        return new ResponseEntity<>(customerService.getAllCustomers(), HttpStatus.OK);
     }
 
     @PostMapping("/create/person")
     public ResponseEntity<Object> createCustomerAsPerson(@RequestBody @Valid CustomerAsPerson customer, BindingResult result) {
-        if (result.hasErrors()) return ResponseEntity.status(400).body(result.getAllErrors());
+        if (result.hasErrors()) return new ResponseEntity<>(result.getAllErrors(), HttpStatus.BAD_REQUEST);
 
         try {
             customerService.insertNewCustomerAsPerson(customer);
-            return ResponseEntity.ok("CustomerAsPerson created");
+            return new ResponseEntity<>("CustomerAsPerson created", HttpStatus.OK);
         } catch (Exception e) {
-            return ResponseEntity.status(500).body(e.getMessage());
+            return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
         }
     }
 
     @PostMapping("/create/company")
     public ResponseEntity<Object> createCustomerAsCompany(@RequestBody @Valid CustomerAsCompany customer, BindingResult result) {
-        if (result.hasErrors()) return ResponseEntity.status(400).body(result.getAllErrors());
+        if (result.hasErrors()) return new ResponseEntity<>(result.getAllErrors(), HttpStatus.BAD_REQUEST);
 
         try {
             customerService.insertNewCustomerAsCompany(customer);
-            return ResponseEntity.ok("CustomerAsCompany created");
+            return new ResponseEntity<>("CustomerAsCompany created", HttpStatus.OK);
         } catch (Exception e) {
-            return ResponseEntity.status(500).body(e.getMessage());
+            return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
         }
     }
 
@@ -53,9 +52,9 @@ public class CustomerController {
     public ResponseEntity<Object> updateCustomerAddress(@RequestBody @Valid Address address, @PathVariable int customerId) {
         try {
             customerService.addAddressToCustomerById(customerId, address);
-            return ResponseEntity.ok("Customer address updated");
+            return new ResponseEntity<>("Customer address updated", HttpStatus.OK);
         } catch (Exception e) {
-            return ResponseEntity.status(500).body(e.getMessage());
+            return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
         }
     }
 }

@@ -4,6 +4,7 @@ import jakarta.validation.Valid;
 import lv.venta.md2.model.Driver;
 import lv.venta.md2.service.IDriverCRUDService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
@@ -19,15 +20,15 @@ public class DriverCRUDController {
 
     @GetMapping("/show/all")
     public ResponseEntity<Object> getDrivers() {
-        return ResponseEntity.ok(driverCRUD.selectAllDriver());
+        return new ResponseEntity<>(driverCRUD.selectAllDriver(), HttpStatus.OK);
     }
 
     @GetMapping("/show/all/{id}")
     public ResponseEntity<Object> getDriverById(@PathVariable int id) {
         try {
-            return ResponseEntity.ok(driverCRUD.selectDriverById(id));
+            return new ResponseEntity<>(driverCRUD.selectDriverById(id), HttpStatus.OK);
         } catch (Exception e) {
-            return ResponseEntity.status(404).body(e.getMessage());
+            return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
         }
     }
 
@@ -35,33 +36,33 @@ public class DriverCRUDController {
     public ResponseEntity<Object> removeDriver(@PathVariable int id) {
         try {
             driverCRUD.deleteDriverById(id);
-            return ResponseEntity.ok("{\"message\": \"Driver removed successfully\"}");
+            return new ResponseEntity<>("Driver removed successfully", HttpStatus.OK);
         } catch (Exception e) {
-            return ResponseEntity.status(404).body("{\"error\": \"" + e.getMessage() + "\"}");
+            return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
         }
     }
 
     @PostMapping("/add")
     public ResponseEntity<Object> addDriver(@RequestBody @Valid Driver driver, BindingResult result) {
-        if (result.hasErrors()) return ResponseEntity.status(400).body(result.getAllErrors());
+        if (result.hasErrors()) return new ResponseEntity<>(result.getAllErrors(), HttpStatus.BAD_REQUEST);
 
         try {
             driverCRUD.insertNewDriver(driver);
-            return ResponseEntity.ok("Driver added successfully");
+            return new ResponseEntity<>("Driver added successfully", HttpStatus.OK);
         } catch (Exception e) {
-            return ResponseEntity.status(500).body(e.getMessage());
+            return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
         }
     }
 
     @PatchMapping("/update/{id}")
     public ResponseEntity<Object> updateDriver(@RequestBody @Valid Driver driver, BindingResult result, @PathVariable int id) {
-        if (result.hasErrors()) return ResponseEntity.status(400).body(result.getAllErrors());
+        if (result.hasErrors()) return new ResponseEntity<>(result.getAllErrors(), HttpStatus.BAD_REQUEST);
 
         try {
             driverCRUD.updateDriverById(id, driver);
-            return ResponseEntity.ok("Driver updated successfully");
+            return new ResponseEntity<>("Driver updated successfully", HttpStatus.OK);
         } catch (Exception e) {
-            return ResponseEntity.status(500).body(e.getMessage());
+            return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
         }
     }
 }
