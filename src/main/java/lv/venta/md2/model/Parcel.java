@@ -1,14 +1,10 @@
 package lv.venta.md2.model;
 
 import jakarta.persistence.*;
-import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotNull;
-import lombok.AccessLevel;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 
-import java.time.LocalDateTime;
+import java.time.LocalDate;
 
 @Getter
 @Setter
@@ -23,19 +19,17 @@ public class Parcel {
     @GeneratedValue(strategy = GenerationType.AUTO)
     private int idpa;
 
-    @NotNull
     @Column(name = "Order_Created")
-    private LocalDateTime orderCreated;
+    private LocalDate orderCreated;
 
     @NotNull
     @Column(name = "Planned_Delivery")
-    private LocalDateTime plannedDelivery;
+    private LocalDate plannedDelivery;
 
     @NotNull
     @Column(name = "Size")
     private ParcelSize size;
 
-    @NotNull
     @Column(name = "Price")
     private float price;
 
@@ -59,19 +53,24 @@ public class Parcel {
             case L -> 4;
             case XL -> 5;
         };
-
-        this.price = (float) (isFragile ? multiplier * 1.99 + 2.99 : multiplier * 1.99);
+        this.price = isFragile ? multiplier * 1.99f + 2.99f : multiplier * 1.99f;
     }
 
     public void setOrderCreated() {
-        this.orderCreated = LocalDateTime.now();
+        this.orderCreated = LocalDate.now();
     }
 
-    public void setPlannedDelivery(LocalDateTime plannedDelivery) {
-        this.plannedDelivery = ( plannedDelivery.isAfter(orderCreated) ) ? plannedDelivery : orderCreated.plusDays(1);
+    public void setPlannedDelivery(LocalDate plannedDelivery) {
+        setOrderCreated();
+        if (plannedDelivery != null) {
+            this.plannedDelivery = plannedDelivery.isBefore(orderCreated) ? orderCreated : plannedDelivery;
+        } else {
+            this.plannedDelivery = LocalDate.now(); // same day delivery or smth
+        }
     }
 
-    public Parcel(LocalDateTime plannedDelivery, ParcelSize size, boolean isFragile, Driver driver, AbstractCustomer customer) {
+
+    public Parcel(LocalDate plannedDelivery, ParcelSize size, boolean isFragile, Driver driver, AbstractCustomer customer) {
         setOrderCreated();
         setPlannedDelivery(plannedDelivery);
         setSize(size);
@@ -80,5 +79,4 @@ public class Parcel {
         setDriver(driver);
         setCustomer(customer);
     }
-
 }

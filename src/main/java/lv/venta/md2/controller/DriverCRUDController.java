@@ -42,7 +42,7 @@ public class DriverCRUDController {
     }
 
     @PostMapping("/add")
-    public ResponseEntity<Object> addDriver(@Valid Driver driver, BindingResult result) {
+    public ResponseEntity<Object> addDriver(@RequestBody @Valid Driver driver, BindingResult result) {
         if (result.hasErrors()) return ResponseEntity.status(400).body(result.getAllErrors());
 
         try {
@@ -53,8 +53,8 @@ public class DriverCRUDController {
         }
     }
 
-    @PostMapping("/update/{id}")
-    public ResponseEntity<Object> updateDriver(@Valid Driver driver, BindingResult result, @PathVariable int id) {
+    @PatchMapping("/update/{id}")
+    public ResponseEntity<Object> updateDriver(@RequestBody @Valid Driver driver, BindingResult result, @PathVariable int id) {
         if (result.hasErrors()) return ResponseEntity.status(400).body(result.getAllErrors());
 
         try {

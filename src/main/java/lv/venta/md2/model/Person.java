@@ -4,23 +4,21 @@ import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Pattern;
 import jakarta.validation.constraints.Size;
-import lombok.AccessLevel;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 
 @Getter
 @Setter
 @NoArgsConstructor
+@ToString
 @Inheritance(strategy = InheritanceType.TABLE_PER_CLASS)
 @Table(name = "Person_Table")
 @Entity
 public class Person {
 
     @Setter(value = AccessLevel.NONE)
-    @Column(name = "Idp")
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
+    @Column(name = "Idp")
     private int idp;
 
     @NotNull
@@ -42,8 +40,8 @@ public class Person {
     private String personCode;
 
     public Person(String name, String surname, String personCode) {
-        setName(name);
-        setSurname(surname);
-        setPersonCode(personCode);
+        this.name = name;
+        this.surname = surname;
+        this.personCode = personCode;
     }
 }

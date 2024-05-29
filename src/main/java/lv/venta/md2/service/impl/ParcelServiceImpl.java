@@ -8,7 +8,7 @@ import lv.venta.md2.service.IParcelService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.time.LocalDateTime;
+import java.time.LocalDate;
 import java.util.ArrayList;
 
 @Service
@@ -22,6 +22,19 @@ public class ParcelServiceImpl implements IParcelService {
 
     @Autowired
     private IDriverRepo driverRepo;
+
+    @Override
+    public ArrayList<Parcel> selectAllParcels() {
+        return (ArrayList<Parcel>) parcelRepo.findAll();
+    }
+
+    @Override
+    public Parcel selectParcelById(int id) throws Exception {
+        if (id < 0) throw new Exception("parcelID must be more than 0");
+        if (!parcelRepo.existsById(id)) throw new Exception("There is no parcel with ID: " + id);
+
+        return parcelRepo.findByIdpa(id);
+    }
 
     @Override
     public ArrayList<Parcel> selectAllParcelsByCustomerId(int customerId) throws Exception {
@@ -48,15 +61,15 @@ public class ParcelServiceImpl implements IParcelService {
     }
 
     @Override
-    public void insertNewParcelByCustomerCodeAndDriverId(String customerCode, int driverId, LocalDateTime plannedDelivery, ParcelSize size, boolean isFragile) throws Exception {
-        if (customerCode == null || driverId < 0 || plannedDelivery == null || size == null) throw new Exception("Problem with input parameters");
+    public void insertNewParcelByCustomerCodeAndDriverId(Parcel parcel, String customerCode, int driverId) throws Exception {
+        if (parcel == null) throw new Exception("Problem with input parameters");
         if (!driverRepo.existsById(driverId)) throw new Exception("There is no driver with ID: " + driverId);
         if (!customerRepo.existsByCustomerCode(customerCode)) throw new Exception("There is no customer with customerCode: " + customerCode);
 
         Driver driver = driverRepo.findByIdp(driverId);
         AbstractCustomer customer = customerRepo.findByCustomerCode(customerCode);
-        Parcel parcel = new Parcel(plannedDelivery, size, isFragile, driver, customer);
-        parcelRepo.save(parcel);
+        Parcel newParcel = new Parcel(parcel.getPlannedDelivery(), parcel.getSize(), parcel.isFragile(), driver, customer);
+        parcelRepo.save(newParcel);
     }
 
     @Override
@@ -89,7 +102,7 @@ public class ParcelServiceImpl implements IParcelService {
         ArrayList<Parcel> parcels = (ArrayList<Parcel>) parcelRepo.findAll();
         int count = 0;
         for (Parcel parcel : parcels) {
-            if (parcel.getPlannedDelivery().getDayOfYear() == LocalDateTime.now().getDayOfYear()) count++;
+            if (parcel.getPlannedDelivery().getDayOfYear() == LocalDate.now().getDayOfYear()) count++;
         }
 
         return count;

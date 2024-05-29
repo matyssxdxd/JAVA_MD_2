@@ -13,7 +13,7 @@ import lombok.Setter;
 public class CustomerAsPerson extends AbstractCustomerAsPerson {
 
     public void setCustomerCode() {
-        this.customerCode = "customer_" + this.person.getPersonCode();
+        this.customerCode = getIdc() + "_customer_" + this.person.getPersonCode();
     }
 
     public CustomerAsPerson(Address address, String phoneNo, Person person) {

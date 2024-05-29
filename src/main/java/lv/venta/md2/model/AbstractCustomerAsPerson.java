@@ -4,10 +4,12 @@ import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import lombok.ToString;
 
 @Getter
 @Setter
 @NoArgsConstructor
+@ToString
 @MappedSuperclass
 public abstract class AbstractCustomerAsPerson extends AbstractCustomer {
 
@@ -15,7 +17,7 @@ public abstract class AbstractCustomerAsPerson extends AbstractCustomer {
     @JoinColumn(name = "Idp")
     protected Person person;
 
-    public AbstractCustomerAsPerson(Address address, String phoneNo, Person person) {
+    protected AbstractCustomerAsPerson(Address address, String phoneNo, Person person) {
         super(address, phoneNo);
         setPerson(person);
     }

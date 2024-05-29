@@ -9,4 +9,6 @@ public interface ICustomerRepo extends CrudRepository<AbstractCustomer, Integer>
     AbstractCustomer findByCustomerCode(String customerCode);
 
     AbstractCustomer findByIdc(int customerId);
+
+    boolean existsByCustomerCodeContains(String personCode);
 }

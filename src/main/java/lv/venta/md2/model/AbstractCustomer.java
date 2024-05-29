@@ -1,19 +1,18 @@
 package lv.venta.md2.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Pattern;
 import jakarta.validation.constraints.Size;
-import lombok.AccessLevel;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 
 import java.util.List;
 
 @Getter
 @Setter
 @NoArgsConstructor
+@ToString
 @Inheritance(strategy = InheritanceType.TABLE_PER_CLASS)
 @Entity
 public abstract class AbstractCustomer {
@@ -21,11 +20,11 @@ public abstract class AbstractCustomer {
     @Setter(value = AccessLevel.NONE)
     @Column(name = "Idc")
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.SEQUENCE)
     private int idc;
 
     @ManyToOne
-    @JoinColumn(name = "Ida")
+    @JoinColumn(name = "Ida", nullable = true)
     private Address address;
 
     @NotNull
@@ -36,13 +35,13 @@ public abstract class AbstractCustomer {
 
 
     @OneToMany(mappedBy = "customer")
+    @JsonIgnore
     private List<Parcel> parcels;
 
-    @NotNull
     @Column(name = "Customer_Code")
     protected String customerCode;
 
-    public AbstractCustomer(Address address, String phoneNo) {
+    protected AbstractCustomer(Address address, String phoneNo) {
         setAddress(address);
         setPhoneNo(phoneNo);
     }

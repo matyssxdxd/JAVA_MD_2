@@ -2,10 +2,14 @@ package lv.venta.md2.service;
 
 import lv.venta.md2.model.*;
 
-import java.time.LocalDateTime;
+import java.time.LocalDate;
 import java.util.ArrayList;
 
 public interface IParcelService {
+
+    ArrayList<Parcel> selectAllParcels();
+
+    Parcel selectParcelById(int id) throws Exception;
 
     ArrayList<Parcel> selectAllParcelsByCustomerId(int customerId) throws Exception;
 
@@ -15,7 +19,7 @@ public interface IParcelService {
 
     ArrayList<Parcel> selectAllParcelsDeliveredToCity(City city);
 
-    void insertNewParcelByCustomerCodeAndDriverId(String customerCode, int driverId, LocalDateTime plannedDelivery, ParcelSize size, boolean isFragile) throws Exception;
+    void insertNewParcelByCustomerCodeAndDriverId(Parcel parcel, String customerCode, int driverId) throws Exception;
 
     void changeParcelDriverByParcelIdAndDriverId(int parcelId, int driverId) throws Exception;
 

@@ -1,5 +1,6 @@
 package lv.venta.md2.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.*;
 import lombok.AccessLevel;
@@ -39,6 +40,7 @@ public class Address {
     private String streetOrHouseTitle;
 
     @OneToMany(mappedBy = "address")
+    @JsonIgnore
     private List<AbstractCustomer> abstractCustomer;
 
     public Address(City city, int houseNo, String streetOrHouseTitle) {

@@ -1,9 +1,7 @@
 package lv.venta.md2.model;
 
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.OneToMany;
-import jakarta.persistence.Table;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import jakarta.persistence.*;
 import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Pattern;
@@ -34,11 +32,12 @@ public class Driver extends Person {
     private float experienceInYears;
 
     @OneToMany(mappedBy = "driver")
-    private List<Parcel> parcels;
+    @JsonIgnore
+    private List<Parcel> parcels = new ArrayList<>();
 
     public Driver(String name, String surname, String personCode, String licenseNo, float experienceInYears) {
         super(name, surname, personCode);
-        setLicenseNo(licenseNo);
-        setExperienceInYears(experienceInYears);
+        this.licenseNo = licenseNo;
+        this.experienceInYears = experienceInYears;
     }
- }
+}

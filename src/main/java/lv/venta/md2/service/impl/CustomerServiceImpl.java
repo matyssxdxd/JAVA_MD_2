@@ -1,13 +1,17 @@
 package lv.venta.md2.service.impl;
 
-import lv.venta.md2.model.AbstractCustomer;
-import lv.venta.md2.model.Address;
-import lv.venta.md2.model.CustomerAsCompany;
-import lv.venta.md2.model.CustomerAsPerson;
+import jakarta.persistence.EntityManager;
+import jakarta.transaction.Transactional;
+import lv.venta.md2.model.*;
+import lv.venta.md2.repo.IAddressRepo;
 import lv.venta.md2.repo.ICustomerRepo;
+import lv.venta.md2.repo.IPersonRepo;
 import lv.venta.md2.service.ICustomerService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+
+import java.util.ArrayList;
+import java.util.Map;
 
 @Service
 public class CustomerServiceImpl implements ICustomerService {
@@ -15,20 +19,39 @@ public class CustomerServiceImpl implements ICustomerService {
     @Autowired
     private ICustomerRepo customerRepo;
 
-    @Override
-    public void insertNewCustomerAsPerson(CustomerAsPerson person) throws Exception {
-        if (person != null) throw new Exception("There is no person provided");
-        if (customerRepo.existsByCustomerCode(person.getCustomerCode())) throw new Exception("Customer as person already exists");
+    @Autowired
+    private IPersonRepo personRepo;
 
-        customerRepo.save(person);
+    @Autowired
+    private IAddressRepo addressRepo;
+
+    @Autowired
+    private EntityManager entityManager;
+
+    @Override
+    @Transactional
+    public void insertNewCustomerAsPerson(CustomerAsPerson customer) throws Exception {
+        if (customer == null) throw new Exception("There is no person provided");
+        if (customerRepo.existsByCustomerCodeContains(customer.getPerson().getPersonCode())) throw new Exception("Customer already exists");
+
+        personRepo.save(customer.getPerson());
+        CustomerAsPerson newCustomer = new CustomerAsPerson(null , customer.getPhoneNo(), customer.getPerson());
+        entityManager.persist(newCustomer);
+        newCustomer.setCustomerCode();
+        customerRepo.save(newCustomer);
     }
 
-    @Override
-    public void insertNewCustomerAsCompany(CustomerAsCompany company) throws Exception {
-        if (company != null) throw new Exception("There is no company provided");
-        if (customerRepo.existsByCustomerCode(company.getCustomerCode())) throw new Exception("Customer as company already exists");
 
-        customerRepo.save(company);
+    @Override
+    @Transactional
+    public void insertNewCustomerAsCompany(CustomerAsCompany customer) throws Exception {
+        if (customer == null) throw new Exception("There is no company provided");
+        if (customerRepo.existsByCustomerCodeContains(customer.getCompanyRegNo())) throw new Exception("Customer already exists");
+
+        CustomerAsCompany newCustomer = new CustomerAsCompany(null, customer.getPhoneNo(), customer.getTitle(), customer.getCompanyRegNo());
+        entityManager.persist(newCustomer);
+        newCustomer.setCustomerCode();
+        customerRepo.save(newCustomer);
     }
 
     @Override
@@ -38,7 +61,13 @@ public class CustomerServiceImpl implements ICustomerService {
         if (!customerRepo.existsById(customerId)) throw new Exception("Customer with ID " + customerId + " does not exist");
 
         AbstractCustomer customer = customerRepo.findByIdc(customerId);
+        addressRepo.save(address);
         customer.setAddress(address);
         customerRepo.save(customer);
+    }
+
+    @Override
+    public ArrayList<AbstractCustomer> getAllCustomers() {
+        return (ArrayList<AbstractCustomer>) customerRepo.findAll();
     }
 }
